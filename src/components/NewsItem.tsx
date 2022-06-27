@@ -3,15 +3,17 @@ import React, { FC } from 'react'
 import { Article } from '../types'
 import Dimensions from '../themes/Dimensions'
 import { useNavigation } from '@react-navigation/native'
+import { useTranslation } from 'react-i18next'
 
 const NewsItem: FC<Article> = (article) => {
     const {navigate}=useNavigation()
+    const {t}=useTranslation()
     return (
         <Pressable onPress={()=>navigate('DeatilsScreen',{articleTitle:article.title})} >
             <ImageBackground imageStyle={{ borderRadius: 15, resizeMode: 'cover' }} style={styles.image} source={{ uri: article.urlToImage }} >
                 <View style={styles.headlineContainer} >
                     <Text style={styles.title} >{article.title}</Text>
-                    <Text style={styles.source} >source : {article.source.name}</Text>
+                    <Text style={styles.source} >{t('source')} : {article.source.name}</Text>
                 </View>
             </ImageBackground>
         </Pressable>
@@ -43,12 +45,14 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: 'white',
         maxWidth: Dimensions.DEVICE_WIDTH * .7,
-        marginBottom: 5
+        marginBottom: 5,
+        textAlign:'left'
     },
     source: {
         fontSize: 10,
         color: 'white',
         maxWidth: Dimensions.DEVICE_WIDTH * .7,
-        opacity: .8
+        opacity: .8,
+        textAlign:'left'
     }
 })

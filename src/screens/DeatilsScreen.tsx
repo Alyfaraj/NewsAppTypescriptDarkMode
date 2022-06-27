@@ -1,9 +1,10 @@
-import { Alert, Image, StyleSheet, Text, View } from 'react-native'
+import { Alert, I18nManager, Image, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { FC, useEffect, useState } from 'react'
 import { axiosApi } from '../network'
 import { Article } from '../types'
 import Dimensions from '../themes/Dimensions'
 import moment from 'moment'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
     route: any
@@ -12,6 +13,7 @@ interface Props {
 const DeatilsScreen: FC<Props> = ({ route }) => {
     const { articleTitle } = route.params
     const [article, setArticle] = useState<Article>()
+    const {t}=useTranslation()
 
 
     // PLEASE NOTE 
@@ -22,7 +24,7 @@ const DeatilsScreen: FC<Props> = ({ route }) => {
         axiosApi.get(`/top-headlines`, {
             params: {
                 q: articleTitle,
-                language: 'en'
+                language: I18nManager.isRTL ? 'ar' : 'en'
             }
         })
             .then(response => {
@@ -39,16 +41,16 @@ const DeatilsScreen: FC<Props> = ({ route }) => {
     }, [])
 
     return (
-        <View style={styles.container} >
+        <ScrollView style={styles.container} >
             <Image style={styles.image} source={{ uri: article?.urlToImage }} />
             <View style={{ marginHorizontal: 15 }} >
                 <Text style={styles.title} >{article?.title}</Text>
-                <Text style={styles.date} >Publish at : {moment(article?.publishedAt).format('LLL')}</Text>
-                {article?.author && <Text style={styles.author} >Author : <Text style={{ fontWeight: "700" }} >{article?.author}</Text></Text>}
-                <Text style={styles.source} >source : {article?.source.name}</Text>
+                <Text style={styles.date} >{t('publish_at')}: {moment(article?.publishedAt).format('LLL')}</Text>
+                {article?.author && <Text style={styles.author} >{t('author')} : <Text style={{ fontWeight: "700" }} >{article?.author}</Text></Text>}
+                <Text style={styles.source} >{t('source')} : {article?.source.name}</Text>
                 <Text style={styles.description} >{article?.description} {'\n \n'} {article?.content}</Text>
             </View>
-        </View>
+        </ScrollView>
     )
 }
 
@@ -72,25 +74,31 @@ const styles = StyleSheet.create({
         fontSize: 17,
         marginBottom: 5,
         alignSelf: 'flex-start',
-        marginVertical: 20
+        marginVertical: 20,
+        textAlign:'left'
     },
     description: {
         width: Dimensions.DEVICE_WIDTH * .94,
         marginVertical: 16,
         alignSelf: 'center',
-        fontSize: 15
+        fontSize: 15,
+        textAlign:'left'
     },
     source: {
         fontSize: 18,
         opacity: .6,
-        marginTop: 10
+        marginTop: 10,
+        textAlign:'left'
     },
     date: {
         marginTop: 10,
-        fontSize: 14
+        fontSize: 14,
+        textAlign:'left'
     },
     author: {
         marginTop: 10,
-        fontSize: 14
+        fontSize: 14,
+        textAlign:'left'
+
     }
 })

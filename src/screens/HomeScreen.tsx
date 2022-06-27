@@ -1,4 +1,4 @@
-import { ActivityIndicator, Alert, StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator, Alert, Button, I18nManager, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { axiosApi } from '../network'
 import axios from 'axios'
@@ -7,14 +7,16 @@ import NewsList from '../components/NewsList'
 import SearchInput from '../components/SearchInput'
 import Colors from '../themes/Colors'
 import Dimensions from '../themes/Dimensions'
+import { ChangeLangugae } from '../i18n'
+import { useTranslation } from 'react-i18next'
 
 const HomeScreen = () => {
     const [news, setNews] = useState<Article[]>([])
     const [searchword, setSearchword] = useState<string>('')
     const [loading, setLoading] = useState<boolean>(false)
     const [refreshing, setRefreshing] = useState<boolean>(false)
-
-
+    const {t}=useTranslation()
+    
     useEffect(() => {
         getAllNews()
     }, [searchword])
@@ -25,13 +27,12 @@ const HomeScreen = () => {
         axiosApi.get(`/top-headlines`, {
             params: {
                 q: searchword ?? '',
-                language: 'en'
+                language: I18nManager.isRTL ? 'ar' : 'en'
             }
         })
             .then(response => {
                 setLoading(false)
                 setRefreshing(false)
-                console.log(response.data)
                 const articles = response.data?.articles
                 if (articles) {
                     setNews(articles)
@@ -44,9 +45,9 @@ const HomeScreen = () => {
     }
 
 
-    const onRefresh = ():void => {
-       setRefreshing(true)
-       getAllNews()
+    const onRefresh = (): void => {
+        setRefreshing(true)
+        getAllNews()
 
     }
 
@@ -54,9 +55,10 @@ const HomeScreen = () => {
     return (
         <View style={styles.container}>
             <SearchInput onChangeText={setSearchword} />
+            <Button title={t('change_language')} onPress={()=>ChangeLangugae()} />
             {!loading && news.length == 0 &&
                 <Text style={styles.notFound} >
-                    {searchword ? 'not found any reslut' : 'there are not news'}
+                    {searchword ?t('no_result') : t('no_news')}
                 </Text>}
             {loading ? <ActivityIndicator size='large' color={Colors.Gray} />
                 : <NewsList refreshing={refreshing} onRefresh={onRefresh} data={news} loadMore={() => { }} />

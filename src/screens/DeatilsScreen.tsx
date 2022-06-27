@@ -3,6 +3,7 @@ import React, { FC, useEffect, useState } from 'react'
 import { axiosApi } from '../network'
 import { Article } from '../types'
 import Dimensions from '../themes/Dimensions'
+import moment from 'moment'
 
 interface Props {
     route: any
@@ -40,9 +41,13 @@ const DeatilsScreen: FC<Props> = ({ route }) => {
     return (
         <View style={styles.container} >
             <Image style={styles.image} source={{ uri: article?.urlToImage }} />
-            <Text style={styles.title} >{article?.title}</Text>
-            <Text style={styles.source} >source : {article?.source.name}</Text>
-            <Text style={styles.description} >{article?.content}</Text>
+            <View style={{ marginHorizontal: 15 }} >
+                <Text style={styles.title} >{article?.title}</Text>
+                <Text style={styles.date} >Publish at : {moment(article?.publishedAt).format('LLL')}</Text>
+                {article?.author && <Text style={styles.author} >Author : <Text style={{ fontWeight: "700" }} >{article?.author}</Text></Text>}
+                <Text style={styles.source} >source : {article?.source.name}</Text>
+                <Text style={styles.description} >{article?.description} {'\n \n'} {article?.content}</Text>
+            </View>
         </View>
     )
 }
@@ -56,7 +61,7 @@ const styles = StyleSheet.create({
     },
     image: {
         width: Dimensions.DEVICE_WIDTH,
-        height: 280,
+        height: 300,
         borderBottomEndRadius: 15,
         borderBottomStartRadius: 15
 
@@ -65,7 +70,6 @@ const styles = StyleSheet.create({
         maxWidth: Dimensions.DEVICE_WIDTH * .7,
         fontWeight: '600',
         fontSize: 17,
-        marginStart: 15,
         marginBottom: 5,
         alignSelf: 'flex-start',
         marginVertical: 20
@@ -79,6 +83,14 @@ const styles = StyleSheet.create({
     source: {
         fontSize: 18,
         opacity: .6,
-        marginStart: 15
+        marginTop: 10
+    },
+    date: {
+        marginTop: 10,
+        fontSize: 14
+    },
+    author: {
+        marginTop: 10,
+        fontSize: 14
     }
 })

@@ -4,7 +4,9 @@ export interface Article {
     source: ArticleSource,
     description: string,
     urlToImage: string,
-    publishedAt: string
+    publishedAt: string,
+    content:string,
+    url:string
 }
 
 

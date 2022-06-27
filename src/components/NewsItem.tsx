@@ -2,10 +2,12 @@ import { StyleSheet, Text, View, ImageBackground, Pressable } from 'react-native
 import React, { FC } from 'react'
 import { Article } from '../types'
 import Dimensions from '../themes/Dimensions'
+import { useNavigation } from '@react-navigation/native'
 
 const NewsItem: FC<Article> = (article) => {
+    const {navigate}=useNavigation()
     return (
-        <Pressable>
+        <Pressable onPress={()=>navigate('DeatilsScreen',{articleTitle:article.title})} >
             <ImageBackground imageStyle={{ borderRadius: 15, resizeMode: 'cover' }} style={styles.image} source={{ uri: article.urlToImage }} >
                 <View style={styles.headlineContainer} >
                     <Text style={styles.title} >{article.title}</Text>

@@ -12,6 +12,7 @@ const HomeScreen = () => {
     const [news, setNews] = useState<Article[]>([])
     const [searchword, setSearchword] = useState<string>('')
     const [loading, setLoading] = useState<boolean>(false)
+    const [refreshing, setRefreshing] = useState<boolean>(false)
 
 
     useEffect(() => {
@@ -29,6 +30,7 @@ const HomeScreen = () => {
         })
             .then(response => {
                 setLoading(false)
+                setRefreshing(false)
                 console.log(response.data)
                 const articles = response.data?.articles
                 if (articles) {
@@ -42,6 +44,12 @@ const HomeScreen = () => {
     }
 
 
+    const onRefresh = ():void => {
+       setRefreshing(true)
+       getAllNews()
+
+    }
+
 
     return (
         <View style={styles.container}>
@@ -51,7 +59,7 @@ const HomeScreen = () => {
                     {searchword ? 'not found any reslut' : 'there are not news'}
                 </Text>}
             {loading ? <ActivityIndicator size='large' color={Colors.Gray} />
-                : <NewsList data={news} loadMore={() => { }} />
+                : <NewsList refreshing={refreshing} onRefresh={onRefresh} data={news} loadMore={() => { }} />
             }
         </View>
     )

@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native'
+import { FlatList, RefreshControl, StyleSheet, Text, View } from 'react-native'
 import React, { FC, useContext } from 'react'
 import { Article } from '../types'
 import NewsItem from './NewsItem'
@@ -6,12 +6,15 @@ import NewsItem from './NewsItem'
 
 interface Props {
     data: Article[],
-    loadMore: Function
+    loadMore: Function,
+    onRefresh:Function,
+    refreshing:boolean
 }
 
-const NewsList: FC<Props> = ({ data, loadMore }) => {
+const NewsList: FC<Props> = ({ data, loadMore,onRefresh,refreshing }) => {
     return (
         <FlatList
+            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={()=>onRefresh()} />}
             data={data}
             renderItem={({ item }) => <NewsItem {...item} />}
             keyExtractor={(item, index) => index.toString()}

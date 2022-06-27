@@ -8,17 +8,19 @@ import SearchInput from '../components/SearchInput'
 
 const HomeScreen = () => {
     const [news, setNews] = useState<Article[]>([])
+    const [searchword, setSearchword] = useState<string>('')
 
    
 
     useEffect(() => {
         getAllNews()
-    }, [])
+    }, [searchword])
 
 
     const getAllNews = (): void => {
         axiosApi.get(`/top-headlines`, {
             params: {
+                q: searchword ?? '',
                 language: 'en'
             }
         })
@@ -36,6 +38,7 @@ const HomeScreen = () => {
 
     return (
         <View style={styles.container} >
+            <SearchInput onChangeText={setSearchword} />
             <NewsList data={news} loadMore={() => { }} />
         </View>
     )

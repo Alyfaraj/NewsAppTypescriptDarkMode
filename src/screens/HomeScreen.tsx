@@ -6,6 +6,7 @@ import { Article } from '../types'
 import NewsList from '../components/NewsList'
 import SearchInput from '../components/SearchInput'
 import Colors from '../themes/Colors'
+import Dimensions from '../themes/Dimensions'
 
 const HomeScreen = () => {
     const [news, setNews] = useState<Article[]>([])
@@ -45,8 +46,13 @@ const HomeScreen = () => {
     return (
         <View style={styles.container}>
             <SearchInput onChangeText={setSearchword} />
+            {!loading && news.length == 0 &&
+                <Text style={styles.notFound} >
+                    {searchword ? 'not found any reslut' : 'there are not news'}
+                </Text>}
             {loading ? <ActivityIndicator size='large' color={Colors.Gray} />
-                : <NewsList data={news} loadMore={() => { }} />}
+                : <NewsList data={news} loadMore={() => { }} />
+            }
         </View>
     )
 }
@@ -59,6 +65,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'white'
     },
     notFound: {
-
+        fontSize: 16,
+        marginTop: Dimensions.DEVICE_HEIGHT * .4,
+        alignSelf: 'center'
     }
 })

@@ -1,10 +1,11 @@
-import { Alert, I18nManager, Image, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Alert, I18nManager, Image, ScrollView, StyleSheet, Text, useColorScheme, View } from 'react-native'
 import React, { FC, useEffect, useState } from 'react'
 import { axiosApi } from '../network'
 import { Article } from '../types'
 import Dimensions from '../themes/Dimensions'
 import moment from 'moment'
 import { useTranslation } from 'react-i18next'
+import Colors from '../themes/Colors'
 
 interface Props {
     route: any
@@ -13,12 +14,13 @@ interface Props {
 const DeatilsScreen: FC<Props> = ({ route }) => {
     const { articleTitle } = route.params
     const [article, setArticle] = useState<Article>()
-    const {t}=useTranslation()
-
+    const { t } = useTranslation()
+    const lightMode = useColorScheme()
+    const styles = { ...sharedStyles(lightMode) };
 
     // PLEASE NOTE 
     // newsapis.org not provide get article details with id 
-    //so we will use title (not good option) 
+    //so we will use title (not a good option) 
     //but I will use it becouse I need add deep linking later   
     const getArticleDetails = (): void => {
         axiosApi.get(`/top-headlines`, {
@@ -56,10 +58,10 @@ const DeatilsScreen: FC<Props> = ({ route }) => {
 
 export default DeatilsScreen
 
-const styles = StyleSheet.create({
+const sharedStyles = (lightMode: any) => StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white'
+        backgroundColor: lightMode == 'dark' ? Colors.black : Colors.white
     },
     image: {
         width: Dimensions.DEVICE_WIDTH,
@@ -75,30 +77,35 @@ const styles = StyleSheet.create({
         marginBottom: 5,
         alignSelf: 'flex-start',
         marginVertical: 20,
-        textAlign:'left'
+        textAlign: 'left',
+        color: lightMode == 'dark' ? Colors.white : Colors.black
     },
     description: {
         width: Dimensions.DEVICE_WIDTH * .94,
         marginVertical: 16,
         alignSelf: 'center',
         fontSize: 15,
-        textAlign:'left'
+        textAlign: 'left',
+        color: lightMode == 'dark' ? Colors.white : Colors.black
     },
     source: {
         fontSize: 18,
         opacity: .6,
         marginTop: 10,
-        textAlign:'left'
+        textAlign: 'left',
+        color: lightMode == 'dark' ? Colors.white : Colors.black
     },
     date: {
         marginTop: 10,
         fontSize: 14,
-        textAlign:'left'
+        textAlign: 'left',
+        color: lightMode == 'dark' ? Colors.white : Colors.black
     },
     author: {
         marginTop: 10,
         fontSize: 14,
-        textAlign:'left'
+        textAlign: 'left',
+        color: lightMode == 'dark' ? Colors.white : Colors.black
 
     }
 })

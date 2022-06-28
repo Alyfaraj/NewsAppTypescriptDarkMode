@@ -3,7 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { DeatilsScreen, HomeScreen, SettingScreen } from "../screens";
-import { Image, StyleSheet } from "react-native";
+import { Image, StyleSheet, useColorScheme } from "react-native";
 import { useTranslation } from "react-i18next";
 import Colors from "../themes/Colors";
 
@@ -42,13 +42,16 @@ const SettingStackScreen = () => {
 
 const Main = () => {
     const { t } = useTranslation()
+    const lightMode = useColorScheme()
 
     return (
         <NavigationContainer>
             <tab.Navigator
+
                 tabBarOptions={{
+                    style: { backgroundColor: lightMode == 'dark' ? Colors.black : Colors.white },
                     activeTintColor: Colors.primary,
-                    inactiveTintColor: Colors.Gray,
+                    inactiveTintColor: '#ccc',
                 }}
             >
                 <tab.Screen
@@ -59,7 +62,7 @@ const Main = () => {
                         tabBarIcon: ({ focused }) =>
                             <Image
                                 source={require('../assets/images/homeicon.png')}
-                                style={[styles.tabImage, { tintColor: focused ? Colors.primary : Colors.Gray }]}
+                                style={[styles.tabImage, { tintColor: focused ? Colors.primary : '#ccc' }]}
                             />,
                     }}
 
@@ -72,7 +75,7 @@ const Main = () => {
                         tabBarIcon: ({ focused }) =>
                             <Image
                                 source={require('../assets/images/settingsicon.png')}
-                                style={[styles.tabImage, { tintColor: focused ? Colors.primary : Colors.Gray }]}
+                                style={[styles.tabImage, { tintColor: focused ? Colors.primary : '#ccc' }]}
                             />,
 
                     }}

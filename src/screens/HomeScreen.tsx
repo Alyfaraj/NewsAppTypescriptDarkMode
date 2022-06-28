@@ -1,4 +1,4 @@
-import { ActivityIndicator, Alert, Button, I18nManager, StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator, Alert, Button, I18nManager, StyleSheet, Text, useColorScheme, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { axiosApi } from '../network'
 import axios from 'axios'
@@ -15,8 +15,10 @@ const HomeScreen = () => {
     const [searchword, setSearchword] = useState<string>('')
     const [loading, setLoading] = useState<boolean>(false)
     const [refreshing, setRefreshing] = useState<boolean>(false)
-    const {t}=useTranslation()
-    
+    const { t } = useTranslation()
+    const lightMode = useColorScheme()
+    const styles = { ...sharedStyles(lightMode) };
+
     useEffect(() => {
         getAllNews()
     }, [searchword])
@@ -57,7 +59,7 @@ const HomeScreen = () => {
             <SearchInput onChangeText={setSearchword} />
             {!loading && news.length == 0 &&
                 <Text style={styles.notFound} >
-                    {searchword ?t('no_result') : t('no_news')}
+                    {searchword ? t('no_result') : t('no_news')}
                 </Text>}
             {loading ? <ActivityIndicator size='large' color={Colors.Gray} />
                 : <NewsList refreshing={refreshing} onRefresh={onRefresh} data={news} loadMore={() => { }} />
@@ -68,10 +70,10 @@ const HomeScreen = () => {
 
 export default HomeScreen
 
-const styles = StyleSheet.create({
+const sharedStyles = (lightMode: any) => StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white'
+        backgroundColor: lightMode == 'dark' ? Colors.black : Colors.white
     },
     notFound: {
         fontSize: 16,

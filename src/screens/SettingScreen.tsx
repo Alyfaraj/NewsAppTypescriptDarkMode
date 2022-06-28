@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, Text, View, Pressable } from 'react-native'
+import { SafeAreaView, StyleSheet, Text, View, Pressable, useColorScheme } from 'react-native'
 import React from 'react'
 import { ChangeLangugae } from '../i18n'
 import { useTranslation } from 'react-i18next'
@@ -6,6 +6,8 @@ import Colors from '../themes/Colors'
 
 const SettingScreen = () => {
   const { t } = useTranslation()
+  const lightMode = useColorScheme()
+  const styles = { ...sharedStyles(lightMode) };
 
   const onChangePress = (): void => {
     ChangeLangugae()
@@ -26,11 +28,11 @@ const SettingScreen = () => {
 
 export default SettingScreen
 
-const styles = StyleSheet.create({
+const sharedStyles = (lightMode:any) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white'
-  },
+    backgroundColor: lightMode == 'dark' ? Colors.black : Colors.white
+},
   textContainer: {
     marginStart: 20,
     alignSelf: 'flex-start'
@@ -39,13 +41,13 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontSize: 16,
     color: Colors.primary,
-    textAlign:'left'
+    textAlign: 'left'
   },
   changeLanguage: {
     fontSize: 16,
-    color: Colors.black,
-    marginTop:2,
-    textAlign:'left'
+    color: lightMode == 'dark' ? Colors.white : Colors.black,
+    marginTop: 2,
+    textAlign: 'left',
 
   }
 })

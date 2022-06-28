@@ -9,7 +9,7 @@ const NewsItem: FC<Article> = (article) => {
     const {navigate}=useNavigation()
     const {t}=useTranslation()
     return (
-        <Pressable onPress={()=>navigate('DeatilsScreen',{articleTitle:article.title})} >
+        <Pressable onPress={()=>navigate('DeatilsScreen',{articleTitle:article.publishedAt})} >
             <ImageBackground imageStyle={{ borderRadius: 15, resizeMode: 'cover' }} style={styles.image} source={{ uri: article.urlToImage }} >
                 <View style={styles.headlineContainer} >
                     <Text style={styles.title} >{article.title}</Text>

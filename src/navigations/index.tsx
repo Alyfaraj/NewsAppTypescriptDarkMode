@@ -6,6 +6,7 @@ import { DeatilsScreen, HomeScreen, SettingScreen } from "../screens";
 import { Image, StyleSheet, useColorScheme } from "react-native";
 import { useTranslation } from "react-i18next";
 import Colors from "../themes/Colors";
+import linking from "../../linking";
 
 const tab = createBottomTabNavigator()
 const HomeStack = createStackNavigator()
@@ -45,7 +46,7 @@ const Main = () => {
     const lightMode = useColorScheme()
 
     return (
-        <NavigationContainer>
+        <NavigationContainer linking={linking} >
             <tab.Navigator
 
                 tabBarOptions={{

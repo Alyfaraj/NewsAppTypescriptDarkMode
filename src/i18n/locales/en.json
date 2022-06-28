@@ -6,6 +6,8 @@
     "publish_at": "Publish at",
     "no_result": "Not found any reslut",
     "no_news": "No news",
-    "change_language": "Change language to Arabic"
+    "change_language": "Change language to Arabic",
+    "settings":"Settings",
+    "news":"News"
   }
 }

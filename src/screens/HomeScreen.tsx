@@ -55,7 +55,6 @@ const HomeScreen = () => {
     return (
         <View style={styles.container}>
             <SearchInput onChangeText={setSearchword} />
-            <Button title={t('change_language')} onPress={()=>ChangeLangugae()} />
             {!loading && news.length == 0 &&
                 <Text style={styles.notFound} >
                     {searchword ?t('no_result') : t('no_news')}

@@ -8,6 +8,6 @@ export const axiosApi = axios.create({
 
 
 axiosApi.interceptors.request.use(request => {
-    request.headers["Authorization"] = API_KEY;
+    request.params["api_token"] = API_KEY;
     return request;
 });

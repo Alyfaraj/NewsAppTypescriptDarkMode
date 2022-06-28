@@ -26,16 +26,17 @@ const HomeScreen = () => {
 
     const getAllNews = (): void => {
         setLoading(true)
-        axiosApi.get(`/top-headlines`, {
+        axiosApi.get(`/news/all`, {
             params: {
                 q: searchword ?? '',
                 language: I18nManager.isRTL ? 'ar' : 'en'
             }
         })
             .then(response => {
+                console.log(response.data)
                 setLoading(false)
                 setRefreshing(false)
-                const articles = response.data?.articles
+                const articles = response.data?.data
                 if (articles) {
                     setNews(articles)
                 }

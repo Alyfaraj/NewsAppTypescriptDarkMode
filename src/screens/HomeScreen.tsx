@@ -28,7 +28,7 @@ const HomeScreen = () => {
         setLoading(true)
         axiosApi.get(`/news/all`, {
             params: {
-                q: searchword ?? '',
+                search: searchword ?? '',
                 language: I18nManager.isRTL ? 'ar' : 'en'
             }
         })

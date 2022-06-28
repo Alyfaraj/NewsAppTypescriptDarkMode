@@ -1,16 +1,11 @@
 export interface Article {
+    uuid:string,
     author: string,
     title: string,
-    source: ArticleSource,
+    source: string,
     description: string,
-    urlToImage: string,
-    publishedAt: string,
-    content:string,
+    image_url: string,
+    published_at: string,
     url:string
 }
 
-
-export interface ArticleSource {
-    name: string,
-    id: string
-}

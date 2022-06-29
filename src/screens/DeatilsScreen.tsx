@@ -1,4 +1,4 @@
-import { ActivityIndicator, Alert, I18nManager, Image, ScrollView, StyleSheet, Text, useColorScheme, View } from 'react-native'
+import { ActivityIndicator, Alert, I18nManager, Image, Pressable, ScrollView, Share, StyleSheet, Text, useColorScheme, View } from 'react-native'
 import React, { FC, useEffect, useState } from 'react'
 import { axiosApi } from '../network'
 import { Article } from '../types'
@@ -19,12 +19,19 @@ const DeatilsScreen: FC<Props> = ({ route }) => {
     const lightMode = useColorScheme()
     const styles = { ...sharedStyles(lightMode) };
 
-    
+
+    const onSharePress = (): void => {
+        Share.share({
+            title: article?.title,
+            url: `demo://app/home/news/${id}`
+        })
+    }
+
 
     const getArticleDetails = (): void => {
         setLoading(true)
-        axiosApi.get(`/news/uuid/${id}`,{
-            params:{}
+        axiosApi.get(`/news/uuid/${id}`, {
+            params: {}
         })
             .then(response => {
                 setLoading(false)
@@ -34,21 +41,26 @@ const DeatilsScreen: FC<Props> = ({ route }) => {
             })
             .catch(err => {
                 setLoading(false)
-               console.log(err)
+                console.log(err)
             })
     }
-    
+
     useEffect(() => {
         getArticleDetails()
     }, [])
 
     return (
         <ScrollView style={styles.container} >
-            {loading ? <ActivityIndicator style={{marginTop:Dimensions.DEVICE_HEIGHT*.5}} color={Colors.Gray} size='large' /> :
+            {loading ? <ActivityIndicator style={{ marginTop: Dimensions.DEVICE_HEIGHT * .5 }} color={Colors.Gray} size='large' /> :
                 <>
                     <Image style={styles.image} source={{ uri: article?.image_url }} />
                     <View style={{ marginHorizontal: 15 }} >
-                        <Text style={styles.title} >{article?.title}</Text>
+                        <View style={styles.row} >
+                            <Text style={styles.title} >{article?.title}</Text>
+                            <Pressable onPress={onSharePress} >
+                                <Image source={require('../assets/images/shareicon.png')} style={styles.share} />
+                            </Pressable>
+                        </View>
                         <Text style={styles.date} >{t('publish_at')}: {moment(article?.published_at).format('LLL')}</Text>
                         {article?.author && <Text style={styles.author} >{t('author')} : <Text style={{ fontWeight: "700" }} >{article?.author}</Text></Text>}
                         <Text style={styles.source} >{t('source')} : {article?.source}</Text>
@@ -111,5 +123,16 @@ const sharedStyles = (lightMode: any) => StyleSheet.create({
         textAlign: 'left',
         color: lightMode == 'dark' ? Colors.white : Colors.black
 
+    },
+    row: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+    },
+    share: {
+        width: 35,
+        height: 35,
+        resizeMode: 'contain',
+        tintColor: Colors.primary
     }
 })

@@ -12,24 +12,25 @@ import { useTranslation } from 'react-i18next'
 
 const HomeScreen = () => {
     const [news, setNews] = useState<Article[]>([])
-    const [searchword, setSearchword] = useState<string>('')
     const [loading, setLoading] = useState<boolean>(false)
     const [refreshing, setRefreshing] = useState<boolean>(false)
     const { t } = useTranslation()
+    const [page, setPage] = useState<number>(1)
     const lightMode = useColorScheme()
     const styles = { ...sharedStyles(lightMode) };
 
     useEffect(() => {
-        getAllNews()
-    }, [searchword])
+        getAllNews(1)
+    }, [])
 
 
-    const getAllNews = (): void => {
+    const getAllNews = (page: number, searchword: string = ''): void => {
         setLoading(true)
         axiosApi.get(`/news/all`, {
             params: {
                 search: searchword ?? '',
-                language: I18nManager.isRTL ? 'ar' : 'en'
+                language: I18nManager.isRTL ? 'ar' : 'en',
+                page: page
             }
         })
             .then(response => {
@@ -37,7 +38,10 @@ const HomeScreen = () => {
                 setLoading(false)
                 setRefreshing(false)
                 const articles = response.data?.data
-                if (articles) {
+                if (page > 1) {
+                    setNews(prv => [...prv, ...articles])
+                }
+                else {
                     setNews(articles)
                 }
             })
@@ -50,21 +54,31 @@ const HomeScreen = () => {
 
     const onRefresh = (): void => {
         setRefreshing(true)
-        getAllNews()
-
+        getAllNews(1)
     }
 
 
     return (
         <View style={styles.container}>
-            <SearchInput onChangeText={setSearchword} />
+            <SearchInput onChangeText={(word: any) => {
+                setPage(1)
+                getAllNews(1, word)
+            }} />
             {!loading && news.length == 0 &&
                 <Text style={styles.notFound} >
-                    {searchword ? t('no_result') : t('no_news')}
+                    {t('no_news')}
                 </Text>}
-            {loading ? <ActivityIndicator size='large' color={Colors.Gray} />
-                : <NewsList refreshing={refreshing} onRefresh={onRefresh} data={news} loadMore={() => { }} />
-            }
+            {loading && page == 1 && <ActivityIndicator size='large' color={Colors.Gray} />}
+            <NewsList
+                ListFooterComponent={loading && page > 1 && <ActivityIndicator size='small' color={Colors.Gray} />}
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+                data={news}
+                loadMore={() => {
+                    getAllNews(page + 1)
+                    setPage(prv => prv + 1)
+                }} />
+
         </View>
     )
 }

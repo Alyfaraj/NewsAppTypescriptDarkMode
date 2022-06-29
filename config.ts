@@ -1,2 +1,2 @@
 export const BASE_URL='https://api.thenewsapi.com/v1'
-export const API_KEY='pJTf1kvSsXsZVf1XpuPNyTgmIpf9ubWiSo4S1P3s'
+export const API_KEY='yciSf8f1HRf1enS14mXX8bBW4uHk9ckbtooeCZeu'

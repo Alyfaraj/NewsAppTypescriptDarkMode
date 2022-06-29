@@ -29,6 +29,7 @@ const DeatilsScreen: FC<Props> = ({ route }) => {
             .then(response => {
                 setLoading(false)
                 const article = response.data
+                console.log(article.description)
                 setArticle(article)
             })
             .catch(err => {

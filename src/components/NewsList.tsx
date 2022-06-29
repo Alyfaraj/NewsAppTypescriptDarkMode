@@ -1,5 +1,5 @@
 import { FlatList, RefreshControl, StyleSheet, Text, View } from 'react-native'
-import React, { FC, useContext } from 'react'
+import React, { Component, FC, useContext } from 'react'
 import { Article } from '../types'
 import NewsItem from './NewsItem'
 
@@ -8,17 +8,20 @@ interface Props {
     data: Article[],
     loadMore: Function,
     onRefresh:Function,
-    refreshing:boolean
+    refreshing:boolean,
+    ListFooterComponent:any
 }
 
-const NewsList: FC<Props> = ({ data, loadMore,onRefresh,refreshing }) => {
+const NewsList: FC<Props> = ({ data, loadMore,onRefresh,refreshing,ListFooterComponent }) => {
     return (
         <FlatList
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={()=>onRefresh()} />}
             data={data}
             renderItem={({ item }) => <NewsItem {...item} />}
             keyExtractor={(item, index) => index.toString()}
-            onEndReachedThreshold={0.9}
+            onEndReachedThreshold={0.8}
+            onEndReached={()=>loadMore()}
+            ListFooterComponent={ListFooterComponent}
         />
     )
 }

@@ -3,7 +3,7 @@ const config = {
         HomeStack: {
             path: "home",
             screens: {
-                DeatilsScreen: 'news/:articleTitle',
+                DeatilsScreen: 'news/:id',
             }
         },
     },

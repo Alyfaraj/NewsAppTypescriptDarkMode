@@ -12,36 +12,31 @@ interface Props {
 }
 
 const DeatilsScreen: FC<Props> = ({ route }) => {
-    const { articleTitle } = route.params
+    const { id } = route.params
     const [article, setArticle] = useState<Article>()
     const { t } = useTranslation()
     const [loading, setLoading] = useState<boolean>(false)
     const lightMode = useColorScheme()
     const styles = { ...sharedStyles(lightMode) };
 
-    // PLEASE NOTE 
-    // newsapis.org not provide get article details with id 
-    //so we will use title (not a good option) 
-    //but I will use it becouse I need add deep linking later   
+    
+
     const getArticleDetails = (): void => {
         setLoading(true)
-        axiosApi.get(`/top-headlines`, {
-            params: {
-                q: articleTitle,
-                language: I18nManager.isRTL ? 'ar' : 'en'
-            }
+        axiosApi.get(`/news/uuid/${id}`,{
+            params:{}
         })
             .then(response => {
                 setLoading(false)
-                const article = response.data?.articles[0]
+                const article = response.data
                 setArticle(article)
             })
             .catch(err => {
                 setLoading(false)
-                Alert.alert(err.response.data?.message)
+               console.log(err)
             })
     }
-
+    
     useEffect(() => {
         getArticleDetails()
     }, [])
@@ -50,13 +45,13 @@ const DeatilsScreen: FC<Props> = ({ route }) => {
         <ScrollView style={styles.container} >
             {loading ? <ActivityIndicator style={{marginTop:Dimensions.DEVICE_HEIGHT*.5}} color={Colors.Gray} size='large' /> :
                 <>
-                    <Image style={styles.image} source={{ uri: article?.urlToImage }} />
+                    <Image style={styles.image} source={{ uri: article?.image_url }} />
                     <View style={{ marginHorizontal: 15 }} >
                         <Text style={styles.title} >{article?.title}</Text>
-                        <Text style={styles.date} >{t('publish_at')}: {moment(article?.publishedAt).format('LLL')}</Text>
+                        <Text style={styles.date} >{t('publish_at')}: {moment(article?.published_at).format('LLL')}</Text>
                         {article?.author && <Text style={styles.author} >{t('author')} : <Text style={{ fontWeight: "700" }} >{article?.author}</Text></Text>}
-                        <Text style={styles.source} >{t('source')} : {article?.source.name}</Text>
-                        <Text style={styles.description} >{article?.description} {'\n \n'} {article?.content}</Text>
+                        <Text style={styles.source} >{t('source')} : {article?.source}</Text>
+                        <Text style={styles.description} >{article?.description}</Text>
                     </View>
                 </>
             }

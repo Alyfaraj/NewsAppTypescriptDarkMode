@@ -26,6 +26,7 @@ const HomeScreen = () => {
 
     const getAllNews = (page: number, searchword: string = ''): void => {
         setLoading(true)
+       if(page==1)setNews([])
         axiosApi.get(`/news/all`, {
             params: {
                 search: searchword ?? '',
@@ -34,7 +35,6 @@ const HomeScreen = () => {
             }
         })
             .then(response => {
-                console.log(response.data)
                 setLoading(false)
                 setRefreshing(false)
                 const articles = response.data?.data
@@ -70,7 +70,7 @@ const HomeScreen = () => {
                 </Text>}
             {loading && page == 1 && <ActivityIndicator size='large' color={Colors.Gray} />}
             <NewsList
-                ListFooterComponent={loading && page > 1 && <ActivityIndicator size='small' color={Colors.Gray} />}
+                ListFooterComponent={loading && page !== 1 && <ActivityIndicator size='small' color={Colors.Gray} />}
                 refreshing={refreshing}
                 onRefresh={onRefresh}
                 data={news}

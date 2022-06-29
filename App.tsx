@@ -1,6 +1,7 @@
 import React, { FC } from "react";
-import {View } from "react-native";
+import {LogBox, View } from "react-native";
 import Navigation from './src/navigations'
+LogBox.ignoreAllLogs();
 
 const App:FC=()=>{
   return(
